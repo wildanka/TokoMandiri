@@ -20,11 +20,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TokoMandiriTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                TokoBerdiriApp(modifier = Modifier.padding())
+
             }
         }
     }

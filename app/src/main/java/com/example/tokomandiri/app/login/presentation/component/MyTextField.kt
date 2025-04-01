@@ -1,6 +1,5 @@
 package com.example.tokomandiri.app.login.presentation.component
 
-import android.widget.Space
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -11,12 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.BasicSecureTextField
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.BasicSecureTextField
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
-import androidx.compose.foundation.text2.input.TextFieldState
-import androidx.compose.foundation.text2.input.TextObfuscationMode
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Email
@@ -27,13 +26,11 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -95,7 +92,7 @@ fun CustomTextField(
     onTrailingClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BasicTextField2(
+    BasicTextField(
         state = textFieldState,
         textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onBackground),
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
@@ -177,7 +174,6 @@ fun PasswordTextField(
         state = textFieldState,
         textObfuscationMode = TextObfuscationMode.Hidden,
         textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onBackground),
-        keyboardType = KeyboardType.Password,
         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         modifier = modifier,
         decorator = { innerTextField ->

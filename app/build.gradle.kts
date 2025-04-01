@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization) apply false
 }
 
 android {
@@ -54,6 +56,13 @@ dependencies {
     implementation(libs.androidx.navigation.testing)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.foundation)
+    //chucker
+    debugImplementation(libs.chucker.library)
+    releaseImplementation(libs.chucker.library.no.op)
+    // Koin for Android
+    implementation(libs.bundles.koin)
+    // Koin Annotations KSP Compiler
+    ksp(libs.koin.ksp.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

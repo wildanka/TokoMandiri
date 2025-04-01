@@ -1,4 +1,4 @@
-package com.example.tokomandiri
+package com.example.tokomandiri.app
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.tokomandiri.R
 import com.example.tokomandiri.app.cart.CartScreen
 import com.example.tokomandiri.app.detail.DetailScreen
 import com.example.tokomandiri.app.home.HomeScreen

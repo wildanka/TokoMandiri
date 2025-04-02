@@ -1,4 +1,4 @@
-package com.example.tokomandiri.app.product.data.remote.response
+package com.example.tokomandiri.app.common.data.network.response
 
 import com.squareup.moshi.Json
 

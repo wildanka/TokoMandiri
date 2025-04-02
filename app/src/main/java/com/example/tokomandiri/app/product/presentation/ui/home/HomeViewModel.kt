@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tokomandiri.app.base.UiState
 import com.example.tokomandiri.app.base.data.ApiResponse
-import com.example.tokomandiri.app.product.data.remote.response.ProductDto
+import com.example.tokomandiri.app.common.data.network.response.ProductDto
 import com.example.tokomandiri.app.product.domain.HomeUseCase
 import com.example.tokomandiri.framework.Event
 import kotlinx.coroutines.Job

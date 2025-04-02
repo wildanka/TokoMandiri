@@ -1,6 +1,8 @@
 package com.example.tokomandiri.app.common
 
+import androidx.room.Room
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.tokomandiri.app.common.data.local.TokoBerdiriDatabase
 import com.example.tokomandiri.app.common.data.network.FakeStoreApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -42,5 +44,19 @@ val commonModule = module {
             .build()
             .create(FakeStoreApi::class.java)
     }
+
+
+    single {
+        Room.databaseBuilder(
+            androidApplication(),
+            TokoBerdiriDatabase::class.java,
+            "myGithubDb"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    single { get<TokoBerdiriDatabase>().productDao }
+    single { get<TokoBerdiriDatabase>().userCartDao }
 
 }

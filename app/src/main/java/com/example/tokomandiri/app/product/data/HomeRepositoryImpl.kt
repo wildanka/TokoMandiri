@@ -2,9 +2,10 @@ package com.example.tokomandiri.app.product.data
 
 import com.example.tokomandiri.app.base.data.ApiResponse
 import com.example.tokomandiri.app.common.data.network.FakeStoreApi
-import com.example.tokomandiri.app.product.data.remote.response.ProductDto
+import com.example.tokomandiri.app.common.data.network.response.ProductDto
+import com.example.tokomandiri.app.product.data.local.HomeLocalDataSource
 
-class HomeRepositoryImpl(private val fakeStoreApi: FakeStoreApi): HomeRepository {
+class HomeRepositoryImpl(private val fakeStoreApi: FakeStoreApi, private val localDataSource: HomeLocalDataSource): HomeRepository {
     override suspend fun getAllProducts(): ApiResponse<List<ProductDto>> {
         val result = fakeStoreApi.getProducts()
         return if(result.isSuccessful){

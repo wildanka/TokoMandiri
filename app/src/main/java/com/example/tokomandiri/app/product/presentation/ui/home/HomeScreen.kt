@@ -10,7 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.tokomandiri.app.base.UiState
-import com.example.tokomandiri.app.product.data.remote.response.ProductDto
+import com.example.tokomandiri.app.common.data.network.response.ProductDto
 import com.example.tokomandiri.app.product.presentation.ui.home.component.ProductItem
 import org.koin.compose.viewmodel.koinViewModel
 

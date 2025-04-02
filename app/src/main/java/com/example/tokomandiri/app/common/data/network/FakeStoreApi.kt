@@ -1,6 +1,6 @@
 package com.example.tokomandiri.app.common.data.network
 
-import com.example.tokomandiri.app.product.data.remote.response.ProductDto
+import com.example.tokomandiri.app.common.data.network.response.ProductDto
 import com.example.tokomandiri.app.login.data.LoginResponse
 import retrofit2.Response
 import retrofit2.http.GET

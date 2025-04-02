@@ -56,13 +56,30 @@ dependencies {
     implementation(libs.androidx.navigation.testing)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.foundation)
+    implementation(libs.bundles.coil)
+
+    // Koin for Android
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.koin.compose)
+    ksp(libs.koin.ksp.compiler)
+
+    //network
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.okhttp)
+    ksp(libs.moshi.kotlin.codegen)
+    implementation(libs.okhttp3.logging.interceptor)
+
     //chucker
     debugImplementation(libs.chucker.library)
     releaseImplementation(libs.chucker.library.no.op)
-    // Koin for Android
-    implementation(libs.bundles.koin)
-    // Koin Annotations KSP Compiler
-    ksp(libs.koin.ksp.compiler)
+
+    //Room
+    implementation(libs.bundles.room)
+    ksp(libs.room.ksp)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

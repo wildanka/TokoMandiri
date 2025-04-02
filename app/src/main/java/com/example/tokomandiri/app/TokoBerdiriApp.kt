@@ -26,7 +26,7 @@ import androidx.navigation.navArgument
 import com.example.tokomandiri.R
 import com.example.tokomandiri.app.cart.CartScreen
 import com.example.tokomandiri.app.detail.DetailScreen
-import com.example.tokomandiri.app.home.HomeScreen
+import com.example.tokomandiri.app.home.presentation.HomeScreen
 import com.example.tokomandiri.app.profile.ProfileScreen
 import com.example.tokomandiri.ui.navigation.NavigationItem
 import com.example.tokomandiri.ui.navigation.Screen
@@ -53,9 +53,7 @@ fun TokoBerdiriApp(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(Screen.Home.route) {
-                HomeScreen(modifier) { productId ->
-                    navController.navigate(Screen.DetailProduct.createRoute(productId))
-                }
+                HomeScreen(modifier, onShowProductDetail = {})
             }
             composable(Screen.Cart.route) {
                 val context = LocalContext.current

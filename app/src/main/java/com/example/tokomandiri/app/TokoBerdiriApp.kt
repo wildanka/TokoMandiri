@@ -1,5 +1,6 @@
 package com.example.tokomandiri.app
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -25,8 +26,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tokomandiri.R
 import com.example.tokomandiri.app.cart.CartScreen
-import com.example.tokomandiri.app.detail.DetailScreen
-import com.example.tokomandiri.app.home.presentation.HomeScreen
+import com.example.tokomandiri.app.product.presentation.ui.detail.DetailScreen
+import com.example.tokomandiri.app.product.presentation.ui.home.HomeScreen
 import com.example.tokomandiri.app.profile.ProfileScreen
 import com.example.tokomandiri.ui.navigation.NavigationItem
 import com.example.tokomandiri.ui.navigation.Screen
@@ -53,7 +54,10 @@ fun TokoBerdiriApp(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(Screen.Home.route) {
-                HomeScreen(modifier, onShowProductDetail = {})
+                HomeScreen(modifier, onShowProductDetail = { productId ->
+                    Log.d("WLDN", "TokoBerdiriApp: onShowProductDetail.id = $productId")
+                    navController.navigate(Screen.DetailProduct.createRoute(productId))
+                })
             }
             composable(Screen.Cart.route) {
                 val context = LocalContext.current
@@ -65,11 +69,13 @@ fun TokoBerdiriApp(
             composable(
                 route = Screen.DetailProduct.route,
                 arguments = listOf(
-                    navArgument("productId") { type = NavType.LongType },
+                    navArgument("productId") { type = NavType.IntType },
                 ),
             ) {
-                val id = it.arguments?.getLong("productId") ?: -1L
-                DetailScreen()
+                val id = it.arguments?.getInt("productId") ?: 0
+                DetailScreen(
+                    productId = id,
+                )
 //                    productId = id,
 //                    navigateBack = { navController.navigateUp() },
 //                    navigateToCart = {

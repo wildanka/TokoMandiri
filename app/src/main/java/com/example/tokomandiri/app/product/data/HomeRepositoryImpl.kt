@@ -1,8 +1,8 @@
-package com.example.tokomandiri.app.home.data
+package com.example.tokomandiri.app.product.data
 
 import com.example.tokomandiri.app.base.data.ApiResponse
 import com.example.tokomandiri.app.common.data.network.FakeStoreApi
-import com.example.tokomandiri.app.home.data.remote.response.ProductDto
+import com.example.tokomandiri.app.product.data.remote.response.ProductDto
 
 class HomeRepositoryImpl(private val fakeStoreApi: FakeStoreApi): HomeRepository {
     override suspend fun getAllProducts(): ApiResponse<List<ProductDto>> {

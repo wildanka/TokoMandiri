@@ -1,11 +1,11 @@
-package com.example.tokomandiri.app.home.presentation.component
+package com.example.tokomandiri.app.product.presentation.ui.home.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -13,9 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,10 +36,13 @@ fun ProductItem(
     category: String,
     rating: Double,
     ratingCount: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClicked: () -> Unit
 ) {
     Card(
-        modifier = modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+        modifier = modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clickable(onClick = onItemClicked),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
@@ -59,7 +60,7 @@ fun ProductItem(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(text = title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Text(text = "$${price.toString()}")
+                Text(text = "$$price")
                 Box(
                     modifier = Modifier
                         .background(color = Color.LightGray, shape = RoundedCornerShape(4.dp))
@@ -70,7 +71,6 @@ fun ProductItem(
                         fontWeight = FontWeight.Light,
                         modifier = Modifier
                             .padding(vertical = 4.dp, horizontal = 8.dp)
-
                     )
                 }
                 Row {
@@ -98,6 +98,7 @@ private fun ProductItemPreview() {
             category = "men's clothing",
             rating = 3.9,
             ratingCount = 120,
+            onItemClicked = {},
         )
     }
 }

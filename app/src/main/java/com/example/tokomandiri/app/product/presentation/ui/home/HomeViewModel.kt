@@ -1,6 +1,5 @@
-package com.example.tokomandiri.app.home.presentation
+package com.example.tokomandiri.app.product.presentation.ui.home
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tokomandiri.app.base.UiState
 import com.example.tokomandiri.app.base.data.ApiResponse
-import com.example.tokomandiri.app.home.data.remote.response.ProductDto
-import com.example.tokomandiri.app.home.domain.HomeUseCase
-import com.example.tokomandiri.framework.AppUtility
+import com.example.tokomandiri.app.product.data.remote.response.ProductDto
+import com.example.tokomandiri.app.product.domain.HomeUseCase
 import com.example.tokomandiri.framework.Event
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

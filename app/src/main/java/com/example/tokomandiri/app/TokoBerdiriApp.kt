@@ -1,12 +1,14 @@
 package com.example.tokomandiri.app
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -14,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -31,6 +34,7 @@ import com.example.tokomandiri.app.product.presentation.ui.home.HomeScreen
 import com.example.tokomandiri.app.profile.ProfileScreen
 import com.example.tokomandiri.ui.navigation.NavigationItem
 import com.example.tokomandiri.ui.navigation.Screen
+import com.example.tokomandiri.ui.theme.White
 
 
 @Composable
@@ -41,6 +45,7 @@ fun TokoBerdiriApp(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
+        containerColor = Color.White,
         bottomBar = {
             if (currentRoute != Screen.DetailProduct.route) {
                 BottomNavBar(navController)
@@ -51,7 +56,7 @@ fun TokoBerdiriApp(
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(innerPadding).background(color = MaterialTheme.colorScheme.background),
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(modifier, onShowProductDetail = { productId ->

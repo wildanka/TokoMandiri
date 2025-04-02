@@ -13,4 +13,20 @@ class HomeRepositoryImpl(private val fakeStoreApi: FakeStoreApi): HomeRepository
             ApiResponse.Error(result.errorBody().toString())
         }
     }
+
+    override suspend fun getProduct(id: Int): ApiResponse<ProductDto> {
+        val result = fakeStoreApi.getProduct(id)
+
+        //TODO : beware of bug possibility here, caused by type casting to "as ApiResponse<ProductDto>"
+        return (if(result.isSuccessful){
+            val product = result.body()
+            if(product != null){
+                ApiResponse.Success(result.body())
+            }else{
+                ApiResponse.Empty
+            }
+        }else{
+            ApiResponse.Error(result.errorBody().toString())
+        }) as ApiResponse<ProductDto>
+    }
 }

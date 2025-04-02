@@ -26,6 +26,6 @@ val homeModule = module {
     }
 
     viewModel {
-        DetailViewModel()
+        DetailViewModel(get())
     }
 }

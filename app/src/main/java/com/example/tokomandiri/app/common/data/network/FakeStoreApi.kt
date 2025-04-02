@@ -13,7 +13,7 @@ interface FakeStoreApi {
     @GET("products")
     suspend fun getProducts(): Response<List<ProductDto>>
 
-    @GET("product/{id}")
+    @GET("products/{id}")
     suspend fun getProduct(@Path("id") productId: Int): Response<ProductDto>
 
     @POST("login")

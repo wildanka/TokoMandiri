@@ -12,4 +12,10 @@ class HomeInteractor(private val homeRepository: HomeRepository) : HomeUseCase {
             homeRepository.getAllProducts()
         }
     }
+
+    override suspend fun getProduct(id: Int): ApiResponse<ProductDto> {
+        return withContext(Dispatchers.IO){
+            homeRepository.getProduct(id)
+        }
+    }
 }

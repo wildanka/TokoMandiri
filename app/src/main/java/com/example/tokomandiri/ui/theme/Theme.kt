@@ -54,7 +54,7 @@ private val LightColorScheme = lightColorScheme(
     tertiaryContainer = Green250,
     onTertiaryContainer = Green900, // Very dark green for contrast
 
-    background = Green100,          // Lightest green for background
+    background = White,          // Lightest green for background
     onBackground = Green800,
 
     surface = Green200,             // Soft green surface

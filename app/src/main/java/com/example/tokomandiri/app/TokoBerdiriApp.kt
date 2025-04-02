@@ -28,13 +28,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tokomandiri.R
-import com.example.tokomandiri.app.cart.CartScreen
+import com.example.tokomandiri.app.cart.presentation.CartScreen
 import com.example.tokomandiri.app.product.presentation.ui.detail.DetailScreen
 import com.example.tokomandiri.app.product.presentation.ui.home.HomeScreen
 import com.example.tokomandiri.app.profile.ProfileScreen
 import com.example.tokomandiri.ui.navigation.NavigationItem
 import com.example.tokomandiri.ui.navigation.Screen
-import com.example.tokomandiri.ui.theme.White
 
 
 @Composable

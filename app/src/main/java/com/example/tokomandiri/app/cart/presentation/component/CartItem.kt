@@ -33,7 +33,8 @@ fun CartItem(
     price: Double,
     qty: Int,
     modifier: Modifier = Modifier,
-    onItemClicked: () -> Unit
+    onItemClicked: () -> Unit,
+    onProductCountChanged: (productId: Int, count: Int) -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -42,7 +43,11 @@ fun CartItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
             AsyncImage(
                 model = imageUrl,
                 contentDescription = null,
@@ -58,12 +63,12 @@ fun CartItem(
                     maxLines = 1,
                     fontWeight = FontWeight.ExtraLight
                 )
-                Text(text = title, fontSize = 14.sp)
+                Text(text = "$$price", fontSize = 14.sp)
                 ProductCounter(
-                    orderCount = 0,
-                    onProductIncreased = {},
+                    orderCount = qty,
                     orderId = productId,
-                    onProductDecreased = {},
+                    onProductIncreased = { onProductCountChanged(productId, qty + 1) },
+                    onProductDecreased = { onProductCountChanged(productId, qty - 1) },
                     modifier = Modifier.align(alignment = Alignment.End)
                 )
             }
@@ -82,7 +87,9 @@ private fun CartItemPreview() {
             imageUrl = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
             title = "Tolak Angin Madu",
             price = 109.95,
-            qty = 0
-        ){}
+            qty = 0,
+            onItemClicked = {},
+            onProductCountChanged = { productId, qty -> },
+        )
     }
 }

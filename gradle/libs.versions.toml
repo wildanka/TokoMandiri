@@ -25,6 +25,7 @@ loggingInterceptor = "4.12.0"
 roomVersion = "2.6.1"
 serialization = "1.7.0-RC"
 ksp = "2.0.20-1.0.25"
+pagingRuntimeKtx = "3.3.6"
 
 
 [libraries]
@@ -70,6 +71,8 @@ coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp"
 room-ksp = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
 room-paging3 = { group = "androidx.room", name = "room-paging", version.ref = "roomVersion" }
+androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntimeKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

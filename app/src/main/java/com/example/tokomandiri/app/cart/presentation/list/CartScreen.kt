@@ -24,7 +24,7 @@ fun CartScreen(modifier: Modifier = Modifier, onCheckoutClick: () -> Unit, viewM
     val pagedCartItems = viewModel.pagedCartItems.collectAsLazyPagingItems()
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp)
     ) {
         items(pagedCartItems.itemCount) { index ->
             val userCartEntity = pagedCartItems[index]
@@ -56,9 +56,9 @@ fun CartScreen(modifier: Modifier = Modifier, onCheckoutClick: () -> Unit, viewM
                     onClick = { onCheckoutClick() },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp)
+                        .padding(horizontal = 8.dp, vertical = 8.dp)
                 ) {
-                    Text(text = "Checkout", fontSize = 18.sp)
+                    Text(text = "Checkout", fontSize = 16.sp)
                 }
                 Spacer(Modifier.height(56.dp))
             }

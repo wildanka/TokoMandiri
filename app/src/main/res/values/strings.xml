@@ -6,5 +6,6 @@
     <string name="order_summary">Ringkasan Pesanan</string>
     <string name="minus_symbol">—</string>
     <string name="plus_symbol">＋</string>
+    <string name="pay_now">Bayar Sekarang</string>
     <string name="add_to_cart">Tambahkan ke keranjang</string>
 </resources>

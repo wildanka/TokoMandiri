@@ -2,6 +2,7 @@ package com.example.tokomandiri.app.cart.presentation.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,11 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.example.tokomandiri.app.common.presentation.component.ProductCounter
 import com.example.tokomandiri.ui.theme.TokoMandiriTheme
 
 @Composable
-fun CartItem(
+fun SummaryItem(
     productId: Int,
     imageUrl: String,
     title: String,
@@ -34,7 +34,6 @@ fun CartItem(
     qty: Int,
     modifier: Modifier = Modifier,
     onItemClicked: () -> Unit,
-    onProductCountChanged: (productId: Int, count: Int) -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -51,7 +50,9 @@ fun CartItem(
             AsyncImage(
                 model = imageUrl,
                 contentDescription = null,
-                modifier = modifier.height(84.dp).width(64.dp),
+                modifier = modifier
+                    .height(84.dp)
+                    .width(64.dp),
                 contentScale = ContentScale.Fit
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -63,13 +64,10 @@ fun CartItem(
                     maxLines = 1,
                     fontWeight = FontWeight.ExtraLight
                 )
-                Text(text = "$$price", fontSize = 14.sp)
-                ProductCounter(
-                    orderCount = qty,
-                    orderId = productId,
-                    onProductIncreased = { onProductCountChanged(productId, qty + 1) },
-                    onProductDecreased = { onProductCountChanged(productId, qty - 1) },
-                    modifier = Modifier.align(alignment = Alignment.End)
+                Text(text = "$$price x $qty", fontSize = 14.sp)
+                Text(
+                    text = "$${price*qty}", fontSize = 14.sp,
+                    modifier = Modifier.align(alignment = Alignment.Start)
                 )
             }
         }
@@ -82,14 +80,13 @@ fun CartItem(
 @Composable
 private fun CartItemPreview() {
     TokoMandiriTheme {
-        CartItem(
+        SummaryItem(
             productId = 123,
             imageUrl = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
             title = "Tolak Angin Madu",
             price = 109.95,
             qty = 0,
             onItemClicked = {},
-            onProductCountChanged = { productId, qty -> },
         )
     }
 }

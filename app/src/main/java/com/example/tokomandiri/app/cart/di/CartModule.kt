@@ -7,6 +7,7 @@ import com.example.tokomandiri.app.cart.data.local.UserCartLocalDataSourceImpl
 import com.example.tokomandiri.app.cart.domain.CartInteractor
 import com.example.tokomandiri.app.cart.domain.CartUseCase
 import com.example.tokomandiri.app.cart.presentation.list.CartViewModel
+import com.example.tokomandiri.app.cart.presentation.summary.SummaryViewModel
 import com.example.tokomandiri.app.common.data.local.TokoBerdiriDatabase
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -23,5 +24,8 @@ val cartModule = module {
 
     viewModel {
         CartViewModel(get())
+    }
+    viewModel {
+        SummaryViewModel(get())
     }
 }

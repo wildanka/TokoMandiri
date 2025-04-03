@@ -14,12 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CartViewModel(private val cartUseCase: CartUseCase): ViewModel() {
-    private var coroutineJob: Job? = null
-    private val _uiState: MutableStateFlow<UiState<List<UserCartEntity>>> =
-        MutableStateFlow(UiState.Loading)
-    val uiState: StateFlow<UiState<List<UserCartEntity>>>
-        get() = _uiState
-
     val pagedCartItems: Flow<PagingData<UserCartEntity>> =
         cartUseCase.getPagedCartItems().cachedIn(viewModelScope)
 

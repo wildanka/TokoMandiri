@@ -17,9 +17,9 @@ class DetailViewModel(
     private val useCase: HomeUseCase
 ) : ViewModel(){
     private var job: Job? = null
-    private val _uiState: MutableStateFlow<UiState<ProductEntity>> =
+    private val _uiState: MutableStateFlow<UiState<UserCartEntity>> =
         MutableStateFlow(UiState.Loading)
-    val uiState: StateFlow<UiState<ProductEntity>>
+    val uiState: StateFlow<UiState<UserCartEntity>>
         get() = _uiState
 
 
@@ -44,19 +44,20 @@ class DetailViewModel(
         }
     }
 
-    fun addProductToCart(productEntity: ProductEntity, qty: Int){
-        val userCartEntity = UserCartEntity(
-            productId = productEntity.id,
-            image = productEntity.image,
-            price = productEntity.price,
-            rating = productEntity.rating,
-            description = productEntity.description,
-            title = productEntity.title,
-            category = productEntity.category,
-            qty = qty
-        )
+    fun addProductToCart(userCartEntity: UserCartEntity, qty: Int){
+        //TODO: delete the commented code
+//        val userCartEntity = UserCartEntity(
+//            productId = productEntity.id,
+//            image = productEntity.image,
+//            price = productEntity.price,
+//            rating = productEntity.rating,
+//            description = productEntity.description,
+//            title = productEntity.title,
+//            category = productEntity.category,
+//            qty = qty
+//        )
         viewModelScope.launch {
-            useCase.insertProductToCart(userCartEntity)
+            useCase.insertProductToCart(userCartEntity.copy(qty = qty))
         }
     }
 }

@@ -15,7 +15,7 @@ class HomeInteractor(private val homeRepository: HomeRepository) : HomeUseCase {
         }
     }
 
-    override suspend fun getProduct(id: Int): ApiResponse<ProductEntity> {
+    override suspend fun getProduct(id: Int): ApiResponse<UserCartEntity> {
         return withContext(Dispatchers.IO){
             homeRepository.getProduct(id)
         }

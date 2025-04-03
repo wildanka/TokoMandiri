@@ -1,6 +1,7 @@
 package com.example.tokomandiri.app.product.data
 
 import com.example.tokomandiri.app.base.data.ApiResponse
+import com.example.tokomandiri.app.common.data.ProductDtoToCartEntMapper
 import com.example.tokomandiri.app.common.data.ProductDtoToEntMapper
 import com.example.tokomandiri.app.common.data.local.entity.ProductEntity
 import com.example.tokomandiri.app.common.data.local.entity.UserCartEntity
@@ -18,16 +19,24 @@ class HomeRepositoryImpl(private val fakeStoreApi: FakeStoreApi, private val loc
         }
     }
 
-    override suspend fun getProduct(id: Int): ApiResponse<ProductEntity> {
+    override suspend fun getProduct(id: Int): ApiResponse<UserCartEntity> {
         val result = fakeStoreApi.getProduct(id)
 
-        //TODO : beware of bug possibility here, caused by type casting to "as ApiResponse<ProductDto>"
         return (if(result.isSuccessful){
             val product = result.body()
 
             if(product != null){
-                val data = ProductDtoToEntMapper.map(product)
-                ApiResponse.Success(data)
+                val data = ProductDtoToCartEntMapper.map(product)
+
+                //TODO : check if the productId has been registered inside the Cart, if yes, return that specific UserCartEntity to get the qty data.
+                val localData = localDataSource.getProductInCartNonLive(productId = data.productId)
+
+                if(localData != null){
+                    ApiResponse.Success(localData)
+                }else{
+                    ApiResponse.Success(data)
+                }
+
             }else{
                 ApiResponse.Empty
             }

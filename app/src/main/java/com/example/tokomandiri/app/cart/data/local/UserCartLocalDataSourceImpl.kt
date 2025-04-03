@@ -12,7 +12,6 @@ class UserCartLocalDataSourceImpl(private val userCartDao: UserCartDao): UserCar
         return userCartDao.getActiveUserCart()
     }
 
-
     override fun getPagedCartItems(): Flow<PagingData<UserCartEntity>> {
         return Pager(
             config = PagingConfig(

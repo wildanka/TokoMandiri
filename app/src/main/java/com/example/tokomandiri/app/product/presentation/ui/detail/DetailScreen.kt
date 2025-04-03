@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.tokomandiri.R
 import com.example.tokomandiri.app.base.UiState
-import com.example.tokomandiri.app.common.data.local.entity.ProductEntity
+import com.example.tokomandiri.app.common.data.local.entity.UserCartEntity
 import com.example.tokomandiri.app.common.data.network.response.Rating
 import com.example.tokomandiri.app.common.presentation.component.ProductCounter
 import com.example.tokomandiri.ui.theme.TokoMandiriTheme
@@ -77,12 +77,12 @@ fun DetailScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailContent(
-    productData: ProductEntity,
+    productData: UserCartEntity,
     modifier: Modifier = Modifier,
     onAddToCard: (Int) -> Unit
 ) {
 
-    var cartCount = remember { mutableIntStateOf(0) }
+    var cartCount = remember { mutableIntStateOf(productData.qty) }
 
     Column(
         modifier = modifier
@@ -140,7 +140,7 @@ fun DetailContent(
         }
         Column {
             ProductCounter(
-                orderId = productData.id,
+                orderId = productData.productId,
                 orderCount = cartCount.intValue,
                 onProductIncreased = { cartCount.intValue = cartCount.intValue + 1 },
                 onProductDecreased = {
@@ -168,12 +168,12 @@ fun DetailContent(
 private fun DetailScreenPreview() {
     TokoMandiriTheme {
         DetailContent(
-            productData = ProductEntity(
+            productData = UserCartEntity(
                 title = "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
                 price = 109.95,
                 description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
                 category = "men's clothing",
-                id = 0,
+                productId = 0,
                 image = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
                 rating = Rating(),
             )

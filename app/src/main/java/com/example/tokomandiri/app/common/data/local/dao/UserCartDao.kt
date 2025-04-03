@@ -18,9 +18,11 @@ interface UserCartDao {
     @Query("SELECT * FROM `userCart` WHERE qty>0")
     fun pagingSource(): PagingSource<Int, UserCartEntity>
 
-
     @Query("SELECT * FROM `userCart` WHERE productId=:productId")
     fun getProductInCart(productId: Int): Flow<UserCartEntity>
+
+    @Query("SELECT * FROM `userCart` WHERE productId=:productId LIMIT 1")
+    suspend fun getProductInCartNonLive(productId: Int): UserCartEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(messages: UserCartEntity)

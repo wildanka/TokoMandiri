@@ -2,13 +2,17 @@ package com.example.tokomandiri.app.product.presentation.ui.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.tokomandiri.app.base.UiState
 import com.example.tokomandiri.app.common.data.network.response.ProductDto
 import com.example.tokomandiri.app.product.presentation.ui.home.component.ProductItem
@@ -28,13 +32,17 @@ fun HomeScreen(
                     modifier = modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text("Home Screen LOADING")
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(128.dp)
+                            .padding(16.dp)
+                    )
                 }
             }
 
             is UiState.Error -> {
                 Box {
-                    Text("Home Screen ERROR")
+                    Text(uiState.errorMessage)
                 }
             }
 
@@ -61,7 +69,7 @@ fun HomeContent(
             ProductItem(
                 productImageUrl = product.image.orEmpty(),
                 title = product.title.orEmpty(),
-                price = (product.price ?: 0.0) as Double,
+                price = (product.price ?: 0.0),
                 category = product.category.orEmpty(),
                 rating = product.rating?.rate ?: 0.0,
                 ratingCount = product.rating?.count ?: 0,

@@ -1,11 +1,11 @@
 package com.example.tokomandiri.app.product.presentation.ui.detail
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tokomandiri.app.base.UiState
 import com.example.tokomandiri.app.base.data.ApiResponse
-import com.example.tokomandiri.app.common.data.local.entity.ProductEntity
 import com.example.tokomandiri.app.common.data.local.entity.UserCartEntity
 import com.example.tokomandiri.app.product.domain.HomeUseCase
 import kotlinx.coroutines.Job
@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-    private val useCase: HomeUseCase
+    private val useCase: HomeUseCase,
+    private val context: Application
 ) : ViewModel(){
     private var job: Job? = null
     private val _uiState: MutableStateFlow<UiState<UserCartEntity>> =

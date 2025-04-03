@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.tokomandiri.app.cart.presentation.component.CartItem
@@ -40,13 +42,26 @@ fun CartScreen(modifier: Modifier = Modifier, viewModel: CartViewModel = koinVie
 
                     },
                     onProductCountChanged = { productId, newQty ->
-                        if(newQty > 0){
+                        if (newQty > 0) {
                             viewModel.insertProductToCart(userCartEntity.copy(qty = newQty))
-                        }else{
+                        } else {
                             viewModel.removeProductFromCart(userCartEntity)
                         }
                     },
                 )
+            }
+        }
+
+        if (pagedCartItems.itemCount > 0) {
+            item{
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp)
+                ) {
+                    Text(text = "Checkout", fontSize = 18.sp)
+                }
             }
         }
 
@@ -56,9 +71,13 @@ fun CartScreen(modifier: Modifier = Modifier, viewModel: CartViewModel = koinVie
                 loadState.append is LoadState.Loading -> {
                     Log.d("WLDN", "CartScreen LoadState.Loading: ")
 
-                    item { CircularProgressIndicator(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)) }
+                    item {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        )
+                    }
                 }
 
                 loadState.append is LoadState.Error -> {

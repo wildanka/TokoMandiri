@@ -9,6 +9,7 @@ import com.example.tokomandiri.app.product.domain.HomeInteractor
 import com.example.tokomandiri.app.product.domain.HomeUseCase
 import com.example.tokomandiri.app.product.presentation.ui.detail.DetailViewModel
 import com.example.tokomandiri.app.product.presentation.ui.home.HomeViewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -30,10 +31,10 @@ val homeModule = module {
     }
 
     viewModel {
-        HomeViewModel(get())
+        HomeViewModel(get(), androidApplication())
     }
 
     viewModel {
-        DetailViewModel(get())
+        DetailViewModel(get(), androidApplication())
     }
 }

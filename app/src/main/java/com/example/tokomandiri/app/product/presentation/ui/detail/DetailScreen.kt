@@ -1,7 +1,9 @@
 package com.example.tokomandiri.app.product.presentation.ui.detail
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,11 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,8 +46,11 @@ import org.koin.compose.viewmodel.koinViewModel
 fun DetailScreen(
     productId: Int,
     modifier: Modifier = Modifier,
-    viewModel: DetailViewModel = koinViewModel()
+    viewModel: DetailViewModel = koinViewModel(),
+    onBackClick: () -> Unit
 ) {
+    Log.d("WLDN DS", "DetailScreen Composable Started")
+
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
             is UiState.Loading -> {
@@ -51,7 +59,11 @@ fun DetailScreen(
                     modifier = modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text("Home Screen LOADING")
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(128.dp)
+                            .padding(16.dp)
+                    )
                 }
             }
 
@@ -64,10 +76,12 @@ fun DetailScreen(
             is UiState.Success -> {
                 DetailContent(
                     productData = uiState.data,
-                    modifier = modifier
-                ) { qty ->
-                    viewModel.addProductToCart(uiState.data, qty)
-                }
+                    modifier = modifier,
+                    onBackClick = onBackClick,
+                    onAddToCart = { qty ->
+                        viewModel.addProductToCart(uiState.data, qty)
+                    }
+                )
             }
         }
     }
@@ -79,7 +93,8 @@ fun DetailScreen(
 fun DetailContent(
     productData: UserCartEntity,
     modifier: Modifier = Modifier,
-    onAddToCard: (Int) -> Unit
+    onAddToCart: (Int) -> Unit,
+    onBackClick: () -> Unit
 ) {
 
     var cartCount = remember { mutableIntStateOf(productData.qty) }
@@ -89,6 +104,12 @@ fun DetailContent(
             .background(color = Color.White)
             .fillMaxSize()
     ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+            contentDescription = null,
+            tint = Color.Black,
+            modifier = Modifier.padding(16.dp).clickable(onClick = onBackClick)
+        )
         LazyColumn(
             modifier = modifier
                 .fillMaxWidth()
@@ -105,7 +126,7 @@ fun DetailContent(
                             .height(200.dp)
                     )
                     Text(
-                        text = productData.title.orEmpty(),
+                        text = productData.title,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold,
                         modifier = modifier.padding(top = 16.dp)
@@ -129,10 +150,10 @@ fun DetailContent(
                             contentDescription = null,
                             tint = Color.Yellow
                         )
-                        Text(text = "${productData.rating?.rate} (${productData.rating?.count})")
+                        Text(text = "${productData.rating.rate} (${productData.rating.count})")
                     }
                     Text(
-                        text = productData.description.orEmpty(),
+                        text = productData.description,
                         modifier = Modifier.padding(vertical = 16.dp)
                     )
                 }
@@ -151,7 +172,7 @@ fun DetailContent(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
             )
             Button(
-                onClick = { onAddToCard(cartCount.intValue) },
+                onClick = { onAddToCart(cartCount.intValue) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -176,7 +197,8 @@ private fun DetailScreenPreview() {
                 productId = 0,
                 image = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
                 rating = Rating(),
-            )
+            ),
+            onAddToCart = {}
         ) {
 
         }

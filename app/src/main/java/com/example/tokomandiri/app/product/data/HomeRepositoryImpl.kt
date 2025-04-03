@@ -33,7 +33,7 @@ class HomeRepositoryImpl(private val fakeStoreApi: FakeStoreApi, private val loc
             }
         }else{
             ApiResponse.Error(result.errorBody().toString())
-        }) as ApiResponse<ProductEntity>
+        })
     }
 
     override suspend fun updateProductCartQty(productId: Int, qty: Int) {

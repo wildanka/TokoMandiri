@@ -19,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,9 +32,8 @@ import coil3.compose.AsyncImage
 import com.example.tokomandiri.R
 import com.example.tokomandiri.app.base.UiState
 import com.example.tokomandiri.app.common.data.local.entity.ProductEntity
-import com.example.tokomandiri.app.common.presentation.component.ProductCounter
-import com.example.tokomandiri.app.common.data.network.response.ProductDto
 import com.example.tokomandiri.app.common.data.network.response.Rating
+import com.example.tokomandiri.app.common.presentation.component.ProductCounter
 import com.example.tokomandiri.ui.theme.TokoMandiriTheme
 import org.koin.compose.viewmodel.koinViewModel
 

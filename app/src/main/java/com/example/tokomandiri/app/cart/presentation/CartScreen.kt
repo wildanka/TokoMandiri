@@ -40,10 +40,7 @@ fun CartScreen(modifier: Modifier = Modifier, viewModel: CartViewModel = koinVie
 
                     },
                     onProductCountChanged = { productId, newQty ->
-
-                        Log.d("WLDN", "CartScreen: newQty=$newQty")
                         if(newQty > 0){
-
                             viewModel.insertProductToCart(userCartEntity.copy(qty = newQty))
                         }else{
                             viewModel.removeProductFromCart(userCartEntity)

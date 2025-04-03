@@ -8,6 +8,6 @@ import com.example.tokomandiri.app.common.data.network.response.ProductDto
 interface HomeUseCase {
     suspend fun getAllProducts() : ApiResponse<List<ProductDto>>
     suspend fun getProduct(id: Int) : ApiResponse<ProductEntity>
-    suspend fun updateProductCartQty(productId: Int, qty: Int) : Unit
+    suspend fun updateProductCartQty(productId: Int, qty: Int)
     suspend fun insertProductToCart(userCartEntity: UserCartEntity)
 }

@@ -7,7 +7,6 @@ import com.example.tokomandiri.app.base.UiState
 import com.example.tokomandiri.app.base.data.ApiResponse
 import com.example.tokomandiri.app.common.data.local.entity.ProductEntity
 import com.example.tokomandiri.app.common.data.local.entity.UserCartEntity
-import com.example.tokomandiri.app.common.data.network.response.ProductDto
 import com.example.tokomandiri.app.product.domain.HomeUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

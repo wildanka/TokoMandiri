@@ -50,7 +50,7 @@ val commonModule = module {
         Room.databaseBuilder(
             androidApplication(),
             TokoBerdiriDatabase::class.java,
-            "myGithubDb"
+            "TokoBerdiriDb"
         )
             .fallbackToDestructiveMigration()
             .build()

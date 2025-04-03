@@ -13,15 +13,17 @@ class HomeLocalDataSourceImpl(
         userId: Int,
         productId: Int
     ): Flow<UserCartEntity> {
-        return userCartDao.getProductInCart(userId, productId)
+        return userCartDao.getProductInCart(productId)
     }
 
-    override fun updateProductQtyInCart(userId: Int, productId: Int, newQty: Int) {
+    override fun updateProductQtyInCart(productId: Int, qty: Int) {
         return userCartDao.updateProductQtyInCart(
             productId = productId,
-            userId = userId,
-            qty = newQty
+            qty = qty
         )
     }
 
+    override fun insertProductToCart(userCartEntity: UserCartEntity) {
+        return userCartDao.insert(userCartEntity)
+    }
 }

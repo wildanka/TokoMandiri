@@ -18,6 +18,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +32,10 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.tokomandiri.R
 import com.example.tokomandiri.app.base.UiState
+import com.example.tokomandiri.app.common.data.local.entity.ProductEntity
 import com.example.tokomandiri.app.common.presentation.component.ProductCounter
 import com.example.tokomandiri.app.common.data.network.response.ProductDto
+import com.example.tokomandiri.app.common.data.network.response.Rating
 import com.example.tokomandiri.ui.theme.TokoMandiriTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -62,7 +67,9 @@ fun DetailScreen(
                 DetailContent(
                     productData = uiState.data,
                     modifier = modifier
-                )
+                ) { qty ->
+                    viewModel.addProductToCart(uiState.data, qty)
+                }
             }
         }
     }
@@ -72,15 +79,23 @@ fun DetailScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailContent(
-    productData: ProductDto,
-    modifier: Modifier = Modifier
+    productData: ProductEntity,
+    modifier: Modifier = Modifier,
+    onAddToCard: (Int) -> Unit
 ) {
-    Column(modifier = modifier
-        .background(color = Color.White)
-        .fillMaxSize()) {
-        LazyColumn(modifier = modifier
-            .fillMaxWidth()
-            .weight(1f)) {
+
+    var cartCount = remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = modifier
+            .background(color = Color.White)
+            .fillMaxSize()
+    ) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
             item {
                 Column(modifier = modifier.padding(16.dp)) {
                     AsyncImage(
@@ -91,7 +106,12 @@ fun DetailContent(
                             .fillMaxWidth()
                             .height(200.dp)
                     )
-                    Text(text = productData.title.orEmpty(), fontSize = 18.sp, fontWeight = FontWeight.ExtraBold, modifier = modifier.padding(top = 16.dp))
+                    Text(
+                        text = productData.title.orEmpty(),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        modifier = modifier.padding(top = 16.dp)
+                    )
                     Text(text = "$${productData.price}")
                     Box(
                         modifier = Modifier
@@ -113,21 +133,31 @@ fun DetailContent(
                         )
                         Text(text = "${productData.rating?.rate} (${productData.rating?.count})")
                     }
-                    Text(text = productData.description.orEmpty(), modifier = Modifier.padding(vertical = 16.dp))
+                    Text(
+                        text = productData.description.orEmpty(),
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
                 }
             }
         }
-        Column{
+        Column {
             ProductCounter(
                 orderId = productData.id,
-                orderCount = 0,
-                onProductIncreased = {},
-                onProductDecreased = {},
+                orderCount = cartCount.intValue,
+                onProductIncreased = { cartCount.intValue = cartCount.intValue + 1 },
+                onProductDecreased = {
+                    if (cartCount.intValue > 0) {
+                        cartCount.intValue = cartCount.intValue - 1
+                    }
+                },
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
             )
-            Button(onClick = {}, modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)) {
+            Button(
+                onClick = { onAddToCard(cartCount.intValue) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
                 Text(text = stringResource(R.string.add_to_cart))
             }
         }
@@ -140,12 +170,17 @@ fun DetailContent(
 private fun DetailScreenPreview() {
     TokoMandiriTheme {
         DetailContent(
-            productData = ProductDto(
+            productData = ProductEntity(
                 title = "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
                 price = 109.95,
                 description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
-                category = "men's clothing"
-            ),
-        )
+                category = "men's clothing",
+                id = 0,
+                image = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+                rating = Rating(),
+            )
+        ) {
+
+        }
     }
 }

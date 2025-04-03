@@ -8,8 +8,6 @@ import com.example.tokomandiri.app.common.data.network.response.Rating
 @Entity(tableName = "userCart")
 data class UserCartEntity(
     @PrimaryKey
-    val userCartId: Int,
-    val userId: Int,
     val productId: Int,
     val image: String,
     val price: Double,

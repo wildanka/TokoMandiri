@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 class UserCartLocalDataSourceImpl(private val userCartDao: UserCartDao): UserCartLocalDataSource {
     override fun getCartActiveItems(userId: Int): Flow<List<UserCartEntity>> {
-        return userCartDao.getActiveUserCart(userId)
+        return userCartDao.getActiveUserCart()
     }
 }

@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface HomeLocalDataSource {
     fun getProductInCart(userId: Int, productId: Int): Flow<UserCartEntity>
-    fun updateProductQtyInCart(userId: Int, productId: Int, newQty: Int)
+    fun updateProductQtyInCart(productId: Int, qty: Int)
+    fun insertProductToCart(userCartEntity: UserCartEntity)
 }

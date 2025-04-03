@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -49,7 +50,9 @@ fun ProductItem(
         Row(modifier = modifier.padding(16.dp)) {
             AsyncImage(
                 model = productImageUrl,
-                modifier = Modifier.size(128.dp),
+                modifier = Modifier
+                    .height(84.dp)
+                    .width(64.dp),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
             )
@@ -59,8 +62,8 @@ fun ProductItem(
                     .weight(1f),
                 horizontalAlignment = Alignment.Start
             ) {
-                Text(text = title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Text(text = "$$price")
+                Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "$$price", fontSize = 14.sp,)
                 Box(
                     modifier = Modifier
                         .background(color = Color.LightGray, shape = RoundedCornerShape(4.dp))
@@ -79,7 +82,7 @@ fun ProductItem(
                         contentDescription = null,
                         tint = Color.Yellow
                     )
-                    Text(text = "$rating ($ratingCount)")
+                    Text(text = "$rating ($ratingCount)", fontSize = 14.sp,)
                 }
             }
         }

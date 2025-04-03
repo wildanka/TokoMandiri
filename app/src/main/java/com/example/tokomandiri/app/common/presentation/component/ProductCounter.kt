@@ -6,12 +6,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,7 +30,8 @@ fun ProductCounter(
     orderCount: Int,
     onProductIncreased: (Int) -> Unit,
     onProductDecreased: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    removeWhenZero: Boolean = false
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -35,16 +40,32 @@ fun ProductCounter(
             .size(width = 110.dp, height = 40.dp)
             .padding(4.dp)
     ) {
-        CounterButton(
-            text = stringResource(R.string.minus_symbol),
-            modifier = Modifier
-                .weight(1f)
-                .size(30.dp)
-                .padding(1.dp),
-            onClick = {
-                onProductDecreased(orderId)
-            },
-        )
+        if(removeWhenZero && orderCount==1){
+            CounterButton(
+                text = stringResource(R.string.minus_symbol),
+                useIcon = true,
+                iconVector = Icons.Outlined.Delete,
+                modifier = Modifier
+                    .weight(1f)
+                    .size(30.dp)
+                    .padding(1.dp),
+                onClick = {
+                    onProductDecreased(orderId)
+                }
+            )
+        }else{
+            CounterButton(
+                text = stringResource(R.string.minus_symbol),
+                modifier = Modifier
+                    .weight(1f)
+                    .size(30.dp)
+                    .padding(1.dp),
+                onClick = {
+                    onProductDecreased(orderId)
+                },
+            )
+        }
+
         Text(
             text = orderCount.toString(),
             modifier = Modifier
@@ -72,6 +93,8 @@ fun CounterButton(
     text: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    useIcon: Boolean = false,
+    iconVector: ImageVector? = null
 ) {
     OutlinedIconButton(
         onClick = {
@@ -81,10 +104,20 @@ fun CounterButton(
         shape = RoundedCornerShape(size = 5.dp),
         modifier = modifier
     ) {
-        Text(
-            text = text,
-            fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.primary,
-        )
+        if(useIcon && iconVector != null){
+            Icon(
+                imageVector = iconVector,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }else{
+
+            Text(
+                text = text,
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
     }
 }

@@ -126,14 +126,14 @@ fun TokoBerdiriApp(
                         scaleIn(
                             initialScale = 0.1f,
                             animationSpec = tween(700),
-                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.0f)
+                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.5f)
                         )
                     },
                     popExitTransition = {
                         scaleOut(
                             targetScale = 0.1f,
                             animationSpec = tween(700),
-                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.0f)
+                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.5f)
                         )
                     },
                     exitTransition = {

@@ -69,7 +69,8 @@ fun CartItem(
                     orderId = productId,
                     onProductIncreased = { onProductCountChanged(productId, qty + 1) },
                     onProductDecreased = { onProductCountChanged(productId, qty - 1) },
-                    modifier = Modifier.align(alignment = Alignment.End)
+                    modifier = Modifier.align(alignment = Alignment.End),
+                    removeWhenZero = true
                 )
             }
         }

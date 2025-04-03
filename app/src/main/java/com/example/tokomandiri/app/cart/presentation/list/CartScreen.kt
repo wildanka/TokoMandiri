@@ -1,7 +1,9 @@
-package com.example.tokomandiri.app.cart.presentation
+package com.example.tokomandiri.app.cart.presentation.list
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -18,7 +20,7 @@ import com.example.tokomandiri.app.cart.presentation.component.CartItem
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun CartScreen(modifier: Modifier = Modifier, viewModel: CartViewModel = koinViewModel()) {
+fun CartScreen(modifier: Modifier = Modifier, onCheckoutClick: () -> Unit, viewModel: CartViewModel = koinViewModel()) {
     val pagedCartItems = viewModel.pagedCartItems.collectAsLazyPagingItems()
 
     LazyColumn(
@@ -49,14 +51,16 @@ fun CartScreen(modifier: Modifier = Modifier, viewModel: CartViewModel = koinVie
 
         if (pagedCartItems.itemCount > 0) {
             item{
+                Spacer(Modifier.height(16.dp))
                 Button(
-                    onClick = {},
+                    onClick = { onCheckoutClick() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 4.dp)
                 ) {
                     Text(text = "Checkout", fontSize = 18.sp)
                 }
+                Spacer(Modifier.height(56.dp))
             }
         }
 

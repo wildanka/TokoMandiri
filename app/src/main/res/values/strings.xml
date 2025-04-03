@@ -3,6 +3,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_cart">Keranjang</string>
     <string name="menu_profile">Profile</string>
+    <string name="order_summary">Ringkasan Pesanan</string>
     <string name="minus_symbol">—</string>
     <string name="plus_symbol">＋</string>
     <string name="add_to_cart">Tambahkan ke keranjang</string>

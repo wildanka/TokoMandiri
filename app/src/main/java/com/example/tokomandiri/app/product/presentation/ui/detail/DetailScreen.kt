@@ -46,7 +46,8 @@ fun DetailScreen(
     productId: Int,
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = koinViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onAddToCart: () -> Unit
 ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
@@ -77,6 +78,7 @@ fun DetailScreen(
                     onBackClick = onBackClick,
                     onAddToCart = { qty ->
                         viewModel.addProductToCart(uiState.data, qty)
+                        onAddToCart()
                     }
                 )
             }

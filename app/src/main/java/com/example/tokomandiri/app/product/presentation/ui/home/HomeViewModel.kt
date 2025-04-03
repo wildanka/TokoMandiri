@@ -44,19 +44,6 @@ class HomeViewModel(
         scrollPosition = position
     }
 
-/*
-    fun refreshList() {
-        _isLoading.value = true
-        if (AppUtility.isNetworkAvailable(context.applicationContext)) {
-            job?.cancel()
-            _isLoading.value = false
-            fetchAllProducts()
-        } else {
-            _isLoading.value = false
-            _errorMessage.postValue(Event("No network connection"))
-        }
-    }
-*/
 
     fun getAllProduct(){
         _isLoading.value = true

@@ -28,7 +28,6 @@ class HomeRepositoryImpl(private val fakeStoreApi: FakeStoreApi, private val loc
             if(product != null){
                 val data = ProductDtoToCartEntMapper.map(product)
 
-                //TODO : check if the productId has been registered inside the Cart, if yes, return that specific UserCartEntity to get the qty data.
                 val localData = localDataSource.getProductInCartNonLive(productId = data.productId)
 
                 if(localData != null){

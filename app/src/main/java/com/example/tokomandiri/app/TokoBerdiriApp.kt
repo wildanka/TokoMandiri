@@ -47,7 +47,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tokomandiri.R
-import com.example.tokomandiri.app.cart.presentation.CartScreen
+import com.example.tokomandiri.app.cart.presentation.list.CartScreen
+import com.example.tokomandiri.app.cart.presentation.summary.SummaryScreen
 import com.example.tokomandiri.app.product.presentation.ui.detail.DetailScreen
 import com.example.tokomandiri.app.product.presentation.ui.home.HomeScreen
 import com.example.tokomandiri.app.profile.ProfileBottomSheetContent
@@ -65,6 +66,7 @@ fun TokoBerdiriApp(
     val currentRoute = navBackStackEntry?.destination?.route
 
     var title by remember { mutableStateOf("") }
+
     //bottomSheet
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -108,7 +110,15 @@ fun TokoBerdiriApp(
                 composable(Screen.Cart.route) {
                     val context = LocalContext.current
                     title = context.resources.getString(R.string.menu_cart)
-                    CartScreen(modifier)
+                    CartScreen(
+                        modifier = modifier,
+                        onCheckoutClick = { navController.navigate(Screen.OrderSummary.route) }
+                    )
+                }
+                composable(Screen.OrderSummary.route) {
+                    val context = LocalContext.current
+                    title = context.resources.getString(R.string.order_summary)
+                    SummaryScreen(modifier)
                 }
                 composable(
                     route = Screen.DetailProduct.route,
@@ -126,6 +136,13 @@ fun TokoBerdiriApp(
                             transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.0f)
                         )
                     },
+                    exitTransition = {
+                        scaleOut(
+                            targetScale = 0.1f,
+                            animationSpec = tween(700),
+                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 1.0f)
+                        )
+                    },
                     arguments = listOf(
                         navArgument("productId") { type = NavType.IntType },
                     ),
@@ -135,6 +152,10 @@ fun TokoBerdiriApp(
                         productId = id,
                         onBackClick = {
                             navController.popBackStack()
+                        },
+                        onAddToCart = {
+                            navController.popBackStack()
+                            navController.navigate(Screen.Cart.route)
                         },
                     )
                 }

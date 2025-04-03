@@ -1,6 +1,5 @@
 package com.example.tokomandiri.app.product.presentation.ui.detail
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,8 +48,6 @@ fun DetailScreen(
     viewModel: DetailViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {
-    Log.d("WLDN DS", "DetailScreen Composable Started")
-
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
             is UiState.Loading -> {

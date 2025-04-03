@@ -1,11 +1,11 @@
 package com.example.tokomandiri.app
 
-import android.util.Log
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,11 +17,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +50,7 @@ import com.example.tokomandiri.R
 import com.example.tokomandiri.app.cart.presentation.CartScreen
 import com.example.tokomandiri.app.product.presentation.ui.detail.DetailScreen
 import com.example.tokomandiri.app.product.presentation.ui.home.HomeScreen
-import com.example.tokomandiri.app.profile.ProfileScreen
+import com.example.tokomandiri.app.profile.ProfileBottomSheetContent
 import com.example.tokomandiri.ui.navigation.NavigationItem
 import com.example.tokomandiri.ui.navigation.Screen
 
@@ -63,71 +65,89 @@ fun TokoBerdiriApp(
     val currentRoute = navBackStackEntry?.destination?.route
 
     var title by remember { mutableStateOf("") }
-
-
+    //bottomSheet
+    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             if (currentRoute != Screen.DetailProduct.route) {
-                MandiriTopAppBar(title, currentRoute.orEmpty(), navController){
-                    navController.popBackStack()
-                }
+                MandiriTopAppBar(
+                    title,
+                    currentRoute.orEmpty(),
+                    navController,
+                    onProfileMenuClick = {
+                        showBottomSheet = true
+                    },
+                    onBackClicked = { navController.popBackStack() }
+                )
             }
         },
         containerColor = Color.White,
         modifier = modifier
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Home.route,
+        Box(
             modifier = Modifier
                 .padding(innerPadding)
-                .background(color = MaterialTheme.colorScheme.background),
+                .background(color = MaterialTheme.colorScheme.background)
         ) {
-            composable(Screen.Home.route) {
-                val context = LocalContext.current
-                title = context.resources.getString(R.string.app_name)
-
-                HomeScreen(modifier, onShowProductDetail = { productId ->
-
-                    navController.navigate(Screen.DetailProduct.createRoute(productId))
-                })
-            }
-            composable(Screen.Cart.route) {
-                val context = LocalContext.current
-                title = context.resources.getString(R.string.menu_cart)
-                CartScreen(modifier)
-            }
-            composable(Screen.Profile.route) {
-                ProfileScreen(modifier)
-            }
-            composable(
-                route = Screen.DetailProduct.route,
-                enterTransition = {
-                    scaleIn(
-                        initialScale = 0.1f,
-                        animationSpec = tween(700),
-                        transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.2f)
-                    )
-                },
-                popExitTransition = {
-                    scaleOut(
-                        targetScale = 0.1f,
-                        animationSpec = tween(700),
-                        transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.2f)
-                    )
-                },
-                arguments = listOf(
-                    navArgument("productId") { type = NavType.IntType },
-                ),
+            NavHost(
+                navController = navController,
+                startDestination = Screen.Home.route,
+                modifier = Modifier.fillMaxSize(),
             ) {
-                val id = it.arguments?.getInt("productId") ?: 0
-                DetailScreen(
-                    productId = id,
-                    onBackClick = {
-                        navController.popBackStack()
+                composable(Screen.Home.route) {
+                    val context = LocalContext.current
+                    title = context.resources.getString(R.string.app_name)
+
+                    HomeScreen(modifier, onShowProductDetail = { productId ->
+
+                        navController.navigate(Screen.DetailProduct.createRoute(productId))
+                    })
+                }
+                composable(Screen.Cart.route) {
+                    val context = LocalContext.current
+                    title = context.resources.getString(R.string.menu_cart)
+                    CartScreen(modifier)
+                }
+                composable(
+                    route = Screen.DetailProduct.route,
+                    enterTransition = {
+                        scaleIn(
+                            initialScale = 0.1f,
+                            animationSpec = tween(700),
+                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.0f)
+                        )
                     },
-                )
+                    popExitTransition = {
+                        scaleOut(
+                            targetScale = 0.1f,
+                            animationSpec = tween(700),
+                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, 0.0f)
+                        )
+                    },
+                    arguments = listOf(
+                        navArgument("productId") { type = NavType.IntType },
+                    ),
+                ) {
+                    val id = it.arguments?.getInt("productId") ?: 0
+                    DetailScreen(
+                        productId = id,
+                        onBackClick = {
+                            navController.popBackStack()
+                        },
+                    )
+                }
+            }
+        }
+
+        // Display BottomSheet when triggered
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { showBottomSheet = false },
+                sheetState = sheetState
+            ) {
+                ProfileBottomSheetContent()
             }
         }
     }
@@ -194,7 +214,8 @@ fun MandiriTopAppBar(
     route: String,
     navHostController: NavHostController,
     modifier: Modifier = Modifier,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onProfileMenuClick: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -209,43 +230,42 @@ fun MandiriTopAppBar(
             )
         },
         navigationIcon = {
-            if(route != Screen.Home.route){
+            if (route != Screen.Home.route) {
                 IconButton(onClick = onBackClicked) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
             }
         },
 
         actions = {
-            IconButton(
-                onClick = {
-                    navHostController.navigate(Screen.Cart.route) {
-                        popUpTo(navHostController.graph.findStartDestination().id) {
-                            saveState = true
+            if (route == Screen.Home.route) {
+                IconButton(
+                    onClick = {
+                        navHostController.navigate(Screen.Cart.route) {
+                            popUpTo(navHostController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            restoreState = true
+                            launchSingleTop = true
                         }
-                        restoreState = true
-                        launchSingleTop = true
-                    }
 
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "Cart")
                 }
-            ) {
-                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "Cart")
+
+                IconButton(
+                    onClick = {
+                        onProfileMenuClick()
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Account")
+                }
             }
 
-            IconButton(
-                onClick = {
-                    navHostController.navigate(Screen.Profile.route) {
-                        popUpTo(navHostController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        restoreState = true
-                        launchSingleTop = true
-                    }
-
-                }
-            ) {
-                Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Account")
-            }
         }
     )
 }

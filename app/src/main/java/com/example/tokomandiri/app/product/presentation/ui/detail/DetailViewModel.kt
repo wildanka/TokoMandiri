@@ -28,17 +28,13 @@ class DetailViewModel(
         job = viewModelScope.launch {
             when (val result = useCase.getProduct(id)) {
                 is ApiResponse.Empty -> {
-                    Log.d("WLDN", "fetchAllProducts: EMPTY")
                     _uiState.value = UiState.Error("Something went wrong")
                 }
                 is ApiResponse.Error -> {
-//                    _errorMessage.postValue(Event(result.errorMessage))
                     _uiState.value = UiState.Error(result.errorMessage)
-                    Log.d("WLDN", "fetchAllProducts: ERROR")
                 }
                 is ApiResponse.Success -> {
                     _uiState.value = UiState.Success(result.data)
-                    Log.d("WLDN", "fetchAllProducts: SUCCESS")
                 }
             }
 
@@ -46,17 +42,6 @@ class DetailViewModel(
     }
 
     fun addProductToCart(userCartEntity: UserCartEntity, qty: Int){
-        //TODO: delete the commented code
-//        val userCartEntity = UserCartEntity(
-//            productId = productEntity.id,
-//            image = productEntity.image,
-//            price = productEntity.price,
-//            rating = productEntity.rating,
-//            description = productEntity.description,
-//            title = productEntity.title,
-//            category = productEntity.category,
-//            qty = qty
-//        )
         viewModelScope.launch {
             useCase.insertProductToCart(userCartEntity.copy(qty = qty))
         }

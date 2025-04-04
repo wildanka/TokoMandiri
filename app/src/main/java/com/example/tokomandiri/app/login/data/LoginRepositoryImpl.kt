@@ -9,13 +9,6 @@ class LoginRepositoryImpl(private val api: FakeStoreLoginApi) : LoginRepository 
     override suspend fun login(username: String, password: String) : ApiResponse<UserLoginDto?>{
         val tokenRequest = api.login(LoginRequest(username, password))
 
-//        val moshi = Moshi.Builder()
-//            .add(KotlinJsonAdapterFactory())
-//            .build()
-//        val json = moshi.adapter(LoginRequest::class.java)
-//            .toJson(LoginRequest(username = "m38rmF$", password = "johnd"))
-//        Log.d("WLDN Debug", json)
-
         if(tokenRequest.isSuccessful){
             val userDataList = api.getUsers()
             val userObject = userDataList.body()?.find { it.username == username }

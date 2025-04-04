@@ -1,7 +1,6 @@
 package com.example.tokomandiri.app.profile
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +27,10 @@ import org.koin.core.context.GlobalContext
 fun ProfileBottomSheetContent(onLogout: () -> Unit) {
     val encryptedSharedPreferences: SharedPreferences = GlobalContext.get().get()
     val encryptedPrefs = encryptedSharedPreferences as EncryptedSharedPreferences
+    val username = encryptedPrefs.getString(AppUtility.USER_NAME, "")
+    val fullname = encryptedPrefs.getString(AppUtility.USER_FULL_NAME, "")
+    val email = encryptedPrefs.getString(AppUtility.USER_EMAIL, "")
+    val address = encryptedPrefs.getString(AppUtility.USER_ADDRESS, "")
 
     Column(
         modifier = Modifier
@@ -35,19 +38,18 @@ fun ProfileBottomSheetContent(onLogout: () -> Unit) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text("User Details", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Text(stringResource(R.string.user_detail), fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Divider()
 
-        UserDetailItem(label = "Name", value = "John Doe")
-        UserDetailItem(label = "Username", value = "@johndoe")
-        UserDetailItem(label = "Email", value = "johndoe@example.com")
+        UserDetailItem(label = stringResource(R.string.name), value = "$fullname")
+        UserDetailItem(label = stringResource(R.string.username), value = "@$username")
+        UserDetailItem(label = stringResource(R.string.email), value = "$email")
+        UserDetailItem(label = stringResource(R.string.address), value = "$address")
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                Log.d("WLDN PS", "logout clicked")
                 onLogout()
-//
             },
             modifier = Modifier
                 .fillMaxWidth()

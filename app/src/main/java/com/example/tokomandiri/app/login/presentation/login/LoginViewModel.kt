@@ -1,7 +1,5 @@
 package com.example.tokomandiri.app.login.presentation.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tokomandiri.app.base.data.ApiResponse
@@ -36,7 +34,6 @@ class LoginViewModel(private val useCase: LoginUseCase) : ViewModel() {
                 }
 
                 is ApiResponse.Success<UserLoginDto?> -> {
-                    //TODO : trigger my Login Screen to do something
                     _loginState.value = LoginUiState.Success
                     _loginEvent.emit(result.data)
                 }

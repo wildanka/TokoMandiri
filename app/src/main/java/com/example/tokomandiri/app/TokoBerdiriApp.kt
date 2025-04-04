@@ -1,7 +1,6 @@
 package com.example.tokomandiri.app
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -72,12 +71,9 @@ fun TokoBerdiriApp(
     val encryptedSharedPreferences: SharedPreferences = GlobalContext.get().get()
     val encryptedPrefs = encryptedSharedPreferences as EncryptedSharedPreferences
     val appToken = encryptedPrefs.getString(AppUtility.APP_TOKEN, "")
-    Log.d("WLDN TBA", "TokoBerdiriApp: $appToken")
 
-    //TODO : handle the login logic
     val isUserLoggedIn = remember { mutableStateOf(!appToken.isNullOrBlank()) }
     val startDestination = if (isUserLoggedIn.value) Screen.Home.route else Screen.Login.route
-
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -85,7 +81,9 @@ fun TokoBerdiriApp(
     var title by remember { mutableStateOf("") }
 
     //bottomSheet
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
     var showBottomSheet by remember { mutableStateOf(false) }
     val noAppBarRoutes = listOf(Screen.DetailProduct.route, Screen.Login.route)
 
@@ -137,9 +135,6 @@ fun TokoBerdiriApp(
                     LoginScreen(
                         modifier = modifier,
                         onLoginSuccess = {
-                            val newToken = encryptedPrefs.getString(AppUtility.APP_TOKEN, "")
-                            Log.d("WLDN APP", "TokoBerdiriApp: onLoginSuccess newToken = $newToken")
-
                             navController.navigate(Screen.Home.route) {
                                 popUpTo(Screen.Login.route) { inclusive = true }
                                 launchSingleTop = true
@@ -202,7 +197,6 @@ fun TokoBerdiriApp(
                 sheetState = sheetState
             ) {
                 ProfileBottomSheetContent(){
-                    //TODO : why not getting triggered?v
                     isUserLoggedIn.value = false
                     val editor = encryptedPrefs.edit()
                     editor.remove(AppUtility.APP_TOKEN)
@@ -211,7 +205,6 @@ fun TokoBerdiriApp(
                     editor.apply()
 
                     val tokenAfterLogout = encryptedPrefs.getString(AppUtility.APP_TOKEN, "")
-                    Log.d("WLDN TBA", "Token after logout: $tokenAfterLogout")
                     showBottomSheet = false
 
                 }

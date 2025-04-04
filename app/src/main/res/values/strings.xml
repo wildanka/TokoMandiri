@@ -8,5 +8,10 @@
     <string name="plus_symbol">＋</string>
     <string name="pay_now">Bayar Sekarang</string>
     <string name="logout">Logout</string>
+    <string name="name">Nama</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="address">Alamat</string>
     <string name="add_to_cart">Tambahkan ke keranjang</string>
+    <string name="user_detail">Detail Pengguna</string>
 </resources>

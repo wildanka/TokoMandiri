@@ -1,7 +1,6 @@
 package com.example.tokomandiri.app.login.presentation.login
 
 import android.content.SharedPreferences
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +40,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import com.example.tokomandiri.R
 import com.example.tokomandiri.app.login.domain.model.LoginUiState
 import com.example.tokomandiri.app.login.presentation.component.MyTextField
+import com.example.tokomandiri.app.profile.util.ProfileUtil
 import com.example.tokomandiri.framework.AppUtility
 import com.example.tokomandiri.ui.theme.TokoMandiriTheme
 import org.koin.compose.viewmodel.koinViewModel
@@ -72,9 +72,16 @@ fun LoginScreen(
         viewModel.loginEvent.collect { user ->
             val editor = encryptedPrefs.edit()
             // Put values (you can also put other types like booleans, ints, etc.)
-//                        editor.putString("username", username.text)
-//                        editor.putString("password", password.text)
-            editor.putString(AppUtility.APP_TOKEN, "TOKEN 123")
+            editor.putString(AppUtility.APP_TOKEN, user?.token)
+            editor.putString(AppUtility.USER_NAME, user?.user?.username.orEmpty())
+            editor.putString(AppUtility.USER_EMAIL, user?.user?.email.orEmpty())
+            editor.putString(
+                AppUtility.USER_FULL_NAME,
+                "${user?.user?.name?.firstname.orEmpty()} ${user?.user?.name?.lastname.orEmpty()}"
+            )
+
+            val convertedAddress = ProfileUtil.constructAddressString(user?.user?.address)
+            editor.putString(AppUtility.USER_ADDRESS, convertedAddress)
 
             // Commit or apply the changes
             editor.apply()
@@ -84,12 +91,10 @@ fun LoginScreen(
     }
 
 
-    val context = LocalContext
     val snackbarHostState = remember { SnackbarHostState() }
     val errorEvent by viewModel.errorMessage.collectAsState()
     LaunchedEffect(errorEvent) {
         errorEvent?.getContentIfNotHandled()?.let { message ->
-//            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             snackbarHostState.showSnackbar(message)
         }
 
@@ -154,8 +159,7 @@ fun LoginScreen(
                 MyTextField(
                     hint = "Username",
                     textFieldState = username,
-                    leadingIcon = Icons.Outlined.Email,
-                    trailingIcon = Icons.Outlined.Check,
+                    leadingIcon = Icons.Outlined.AccountCircle,
                     isPassword = false,
                     onLeadingClick = {},
                     onTrailingClick = {},
@@ -169,7 +173,6 @@ fun LoginScreen(
                     isPassword = true,
                     onLeadingClick = {},
                     onTrailingClick = {},
-                    trailingText = "Forgot?",
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
 

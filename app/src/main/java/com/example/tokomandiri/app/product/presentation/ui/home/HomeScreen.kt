@@ -19,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.tokomandiri.app.base.UiState
 import com.example.tokomandiri.app.common.data.network.response.ProductDto
@@ -39,7 +38,7 @@ fun HomeScreen(
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
             is UiState.Loading -> {
-                viewModel.fetchAllProducts()
+                viewModel.getAllProduct()
                 Box(
                     modifier = modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
@@ -71,7 +70,6 @@ fun HomeScreen(
                     onShowProductDetail = onShowProductDetail,
                     onCategoryClick = { newActiveCategory ->
                         activeCategory.value = newActiveCategory
-                        //limit UI display
                     }
                 )
             }

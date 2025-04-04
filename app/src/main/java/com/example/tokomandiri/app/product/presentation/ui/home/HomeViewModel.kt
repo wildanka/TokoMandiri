@@ -36,14 +36,6 @@ class HomeViewModel(
     private val _errorMessage = MutableLiveData<Event<String>>()
     val errorMessage: LiveData<Event<String>> = _errorMessage
 
-    // Store the scroll position
-    var scrollPosition: Int by mutableIntStateOf(0)
-
-    // Function to update scroll position
-    fun updateScrollPosition(position: Int) {
-        scrollPosition = position
-    }
-
 
     fun getAllProduct(){
         _isLoading.value = true

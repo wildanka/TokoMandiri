@@ -1,5 +1,7 @@
 package com.example.tokomandiri.app
 
+import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -46,14 +48,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.security.crypto.EncryptedSharedPreferences
 import com.example.tokomandiri.R
 import com.example.tokomandiri.app.cart.presentation.list.CartScreen
 import com.example.tokomandiri.app.cart.presentation.summary.SummaryScreen
+import com.example.tokomandiri.app.login.presentation.login.LoginScreen
 import com.example.tokomandiri.app.product.presentation.ui.detail.DetailScreen
 import com.example.tokomandiri.app.product.presentation.ui.home.HomeScreen
 import com.example.tokomandiri.app.profile.ProfileBottomSheetContent
+import com.example.tokomandiri.framework.AppUtility
 import com.example.tokomandiri.ui.navigation.NavigationItem
 import com.example.tokomandiri.ui.navigation.Screen
+import org.koin.core.context.GlobalContext
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +68,17 @@ fun TokoBerdiriApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
+
+    val encryptedSharedPreferences: SharedPreferences = GlobalContext.get().get()
+    val encryptedPrefs = encryptedSharedPreferences as EncryptedSharedPreferences
+    val appToken = encryptedPrefs.getString(AppUtility.APP_TOKEN, "")
+    Log.d("WLDN TBA", "TokoBerdiriApp: $appToken")
+
+    //TODO : handle the login logic
+    val isUserLoggedIn = remember { mutableStateOf(!appToken.isNullOrBlank()) }
+    val startDestination = if (isUserLoggedIn.value) Screen.Home.route else Screen.Login.route
+
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -70,10 +87,11 @@ fun TokoBerdiriApp(
     //bottomSheet
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
+    val noAppBarRoutes = listOf(Screen.DetailProduct.route, Screen.Login.route)
 
     Scaffold(
         topBar = {
-            if (currentRoute != Screen.DetailProduct.route) {
+            if (currentRoute !in noAppBarRoutes) {
                 MandiriTopAppBar(
                     title,
                     currentRoute.orEmpty(),
@@ -95,7 +113,7 @@ fun TokoBerdiriApp(
         ) {
             NavHost(
                 navController = navController,
-                startDestination = Screen.Home.route,
+                startDestination = startDestination,
                 modifier = Modifier.fillMaxSize(),
             ) {
                 composable(Screen.Home.route) {
@@ -113,6 +131,21 @@ fun TokoBerdiriApp(
                     CartScreen(
                         modifier = modifier,
                         onCheckoutClick = { navController.navigate(Screen.OrderSummary.route) }
+                    )
+                }
+                composable(Screen.Login.route) {
+                    LoginScreen(
+                        modifier = modifier,
+                        onLoginSuccess = {
+                            val newToken = encryptedPrefs.getString(AppUtility.APP_TOKEN, "")
+                            Log.d("WLDN APP", "TokoBerdiriApp: onLoginSuccess newToken = $newToken")
+
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(Screen.Login.route) { inclusive = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
                     )
                 }
                 composable(Screen.OrderSummary.route) {
@@ -168,7 +201,20 @@ fun TokoBerdiriApp(
                 onDismissRequest = { showBottomSheet = false },
                 sheetState = sheetState
             ) {
-                ProfileBottomSheetContent()
+                ProfileBottomSheetContent(){
+                    //TODO : why not getting triggered?v
+                    isUserLoggedIn.value = false
+                    val editor = encryptedPrefs.edit()
+                    editor.remove(AppUtility.APP_TOKEN)
+
+                    // Commit or apply the changes
+                    editor.apply()
+
+                    val tokenAfterLogout = encryptedPrefs.getString(AppUtility.APP_TOKEN, "")
+                    Log.d("WLDN TBA", "Token after logout: $tokenAfterLogout")
+                    showBottomSheet = false
+
+                }
             }
         }
     }

@@ -19,4 +19,11 @@ object AppUtility {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
+
+
+    const val APP_TOKEN = "APP_TOKEN"
+    const val USER_NAME = "USER_NAME"
+    const val USER_EMAIL = "USER_EMAIL"
+    const val USER_FULL_NAME = "USER_FULL_NAME"
+    const val USER_ADDRESS = "USER_ADDRESS"
 }

@@ -24,6 +24,7 @@ koinAnnotation = "2.0.0-RC1"
 chuckerVersion = "4.1.0"
 loggingInterceptor = "4.12.0"
 roomVersion = "2.6.1"
+securityCrypto = "1.1.0-alpha06"
 serialization = "1.7.0-RC"
 ksp = "2.0.20-1.0.25"
 pagingRuntimeKtx = "3.3.6"
@@ -33,6 +34,7 @@ pagingRuntimeKtx = "3.3.6"
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

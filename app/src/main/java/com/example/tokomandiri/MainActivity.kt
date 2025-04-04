@@ -12,10 +12,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.tokomandiri.app.TokoBerdiriApp
 import com.example.tokomandiri.ui.theme.TokoMandiriTheme
 
+
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+
+//        encryptedSharedPreferences.edit { putString("user_token", "your_token_here") }
+//        encryptedSharedPreferences.edit { putString("user_token", "your_token_here") }
+//
+//        val token = encryptedSharedPreferences.getString("user_token", null)
+// Retrieve data
         setContent {
             TokoMandiriTheme {
                 TokoBerdiriApp(modifier = Modifier.padding())

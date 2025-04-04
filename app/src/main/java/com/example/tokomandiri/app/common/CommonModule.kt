@@ -1,6 +1,11 @@
 package com.example.tokomandiri.app.common
 
+import android.content.SharedPreferences
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import androidx.room.Room
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.tokomandiri.app.common.data.local.TokoBerdiriDatabase
 import com.example.tokomandiri.app.common.data.network.FakeStoreApi
@@ -58,5 +63,39 @@ val commonModule = module {
 
     single { get<TokoBerdiriDatabase>().productDao }
     single { get<TokoBerdiriDatabase>().userCartDao }
+
+
+//    single { EncryptedPreferencesProvider(androidApplication()) }
+//    single {
+//        get<EncryptedPreferencesProvider>().createEncryptedPreferences()
+//    }
+
+    single<SharedPreferences> {
+        // Your existing code to create EncryptedSharedPreferences
+        val KEY_SIZE = 256
+        val KEY_ALIAS = "_androidx_security_master_key_"
+        val appPreferenceName = "WILDAN_MANDIRI_PREF"
+        val spec = KeyGenParameterSpec.Builder(
+            KEY_ALIAS,
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        )
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            .setKeySize(KEY_SIZE)
+            .build()
+
+        val masterKey = MasterKey.Builder(androidApplication())
+            .setKeyGenParameterSpec(spec)
+            .build()
+
+        EncryptedSharedPreferences.create(
+            androidApplication(),
+            appPreferenceName,
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
 
 }

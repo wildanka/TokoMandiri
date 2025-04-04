@@ -1,5 +1,7 @@
-package com.example.tokomandiri.app.login.presentation.screen
+package com.example.tokomandiri.app.login.presentation.login
 
+import android.content.SharedPreferences
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -17,11 +19,17 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
@@ -29,13 +37,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.security.crypto.EncryptedSharedPreferences
 import com.example.tokomandiri.R
+import com.example.tokomandiri.app.login.domain.model.LoginUiState
 import com.example.tokomandiri.app.login.presentation.component.MyTextField
+import com.example.tokomandiri.framework.AppUtility
 import com.example.tokomandiri.ui.theme.TokoMandiriTheme
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.context.GlobalContext
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    onLoginSuccess: () -> Unit,
+    viewModel: LoginViewModel = koinViewModel()
+) {
+    val encryptedSharedPreferences: SharedPreferences = GlobalContext.get().get()
+    val encryptedPrefs = encryptedSharedPreferences as EncryptedSharedPreferences
+
     val username = remember {
         TextFieldState(initialText = "", initialSelection = TextRange(0))
     }
@@ -43,7 +64,62 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         TextFieldState(initialText = "", initialSelection = TextRange(0))
     }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+    val loginState by viewModel.loginState.collectAsState()
+
+
+    LaunchedEffect(Unit) {
+        viewModel.loginEvent.collect { user ->
+            val editor = encryptedPrefs.edit()
+            // Put values (you can also put other types like booleans, ints, etc.)
+//                        editor.putString("username", username.text)
+//                        editor.putString("password", password.text)
+            editor.putString(AppUtility.APP_TOKEN, "TOKEN 123")
+
+            // Commit or apply the changes
+            editor.apply()
+
+            onLoginSuccess()
+        }
+    }
+
+
+    val context = LocalContext
+    val snackbarHostState = remember { SnackbarHostState() }
+    val errorEvent by viewModel.errorMessage.collectAsState()
+    LaunchedEffect(errorEvent) {
+        errorEvent?.getContentIfNotHandled()?.let { message ->
+//            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            snackbarHostState.showSnackbar(message)
+        }
+
+    }
+
+
+    when (loginState) {
+        is LoginUiState.Loading -> {
+            // Show loading
+        }
+
+        is LoginUiState.Error -> {
+            val message = (loginState as LoginUiState.Error).message
+            Text("Login failed: $message")
+        }
+
+        LoginUiState.Success -> {
+            // Already handled by event
+        }
+
+        LoginUiState.Idle -> {
+            // Initial state
+        }
+    }
+
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { innerPadding ->
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -77,7 +153,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 )
                 MyTextField(
                     hint = "Username",
-                    textFieldState = TextFieldState(),
+                    textFieldState = username,
                     leadingIcon = Icons.Outlined.Email,
                     trailingIcon = Icons.Outlined.Check,
                     isPassword = false,
@@ -98,7 +174,12 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 )
 
                 Button(
-                    onClick = {},
+                    onClick = {
+                        //hit the login API
+                        viewModel.login(username.text.toString(), password.text.toString())
+
+//                        onLoginSuccess()
+                    },
                     modifier = Modifier.padding(top = 22.dp)
                 ) {
                     Text(
@@ -119,5 +200,5 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
-    TokoMandiriTheme { LoginScreen() }
+    TokoMandiriTheme { LoginScreen(onLoginSuccess = {}) }
 }

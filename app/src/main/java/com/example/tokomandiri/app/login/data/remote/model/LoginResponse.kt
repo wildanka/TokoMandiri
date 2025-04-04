@@ -1,4 +1,4 @@
-package com.example.tokomandiri.app.login.data
+package com.example.tokomandiri.app.login.data.remote.model
 
 import com.squareup.moshi.Json
 
